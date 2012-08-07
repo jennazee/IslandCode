@@ -28,8 +28,8 @@ def parse_results_file(filename):
 	processed = []
 
 	moreheader = raw_input('Extra header labels from question field (e.g.: item,condition,factor1,factor2): ')
-	stim_type = raw_input('What type are your stims? (i.e. AcceptabilityJudgment)')
-	output_loc = raw_input('Where would you like to put your parsed file? (enter filename path)')
+	stim_type = raw_input('What type are your stims? (i.e. AcceptabilityJudgment): ')
+	output_loc = raw_input('Where would you like to put your parsed file? (enter filename path): ')
 	
 	for line in pretext:
 		if re.match('#', line):
