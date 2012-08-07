@@ -27,8 +27,10 @@ def parse_results_file(filename):
 	text = []
 	processed = []
 
-	moreheader = raw_input('Extra header labels (e.g.: item,condition,factor1,factor2): ')
-
+	moreheader = raw_input('Extra header labels from question field (e.g.: item,condition,factor1,factor2): ')
+	stim_type = raw_input('What type are your stims? (i.e. AcceptabilityJudgment)')
+	output_loc = raw_input('Where would you like to put your parsed file? (enter filename path)')
+	
 	for line in pretext:
 		if re.match('#', line):
 			continue
@@ -39,7 +41,7 @@ def parse_results_file(filename):
 	first = 1;
 
 	for line in range(len(text)):
-		if re.search('AcceptabilityJudgment', text[line]):
+		if re.search(stim_type, text[line]):
 			if first:
 				processed.append(text[line])
 				first=0
@@ -61,7 +63,7 @@ def parse_results_file(filename):
 			print parts
 			processed.append(str(toAmend.strip()+ ','+ string.join(parts, ',')+'\n'))
 			
-	output = open('data.txt', 'w')
+	output = open(output_loc, 'w')
 
 	header = 'Time sent,MD5 Hash of IP Address,Controller,Item Number,Element Number,Type,Group,Stimulus,Answer,RT,'
 
@@ -72,3 +74,5 @@ def parse_results_file(filename):
 	output.close()
 
 parse_results_file(sys.argv[1])
+
+print "All done! Enjoy your clean data!"
