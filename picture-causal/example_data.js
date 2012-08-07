@@ -3,8 +3,8 @@ var shuffleSequence = seq("consent", "intro", "practice1", "sep", sepWith("sep",
 var defaults = [
     "Separator", {
         transfer: 1000,
-        normalMessage: "Please wait for the next sentence.",
-        errorMessage: "Wrong. Please wait for the next sentence."
+        normalMessage: '',
+        errorMessage: ''
     },
     "DashedSentence", {
         mode: "self-paced reading"
@@ -13,10 +13,11 @@ var defaults = [
         as: ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         presentAsScale: true,
         instructions: "Click the boxes to answer.",
-        leftComment: "(Extremely Unnatural)", rightComment: "(Extremely Natural)"
+        leftComment: "Not at all", rightComment: "Extremely Influential"
     },
     "Question", {
-        hasCorrect: true
+        hasCorrect: false,
+        timeout: 1
     },
     "Message", {
         hideProgressBar: true
@@ -38,7 +39,7 @@ var items = [
     // the shuffle sequence, you must set the 'manualSendResults' configuration variable to 'true', since
     // otherwise, results are automatically sent at the end of the experiment.
     //
-    //["sr", "__SendResults__", { }],
+    ["sr", "__SendResults__", { }],
 
     ["sep", "Separator", { }],
 
@@ -54,14 +55,26 @@ var items = [
     // NOTE: You could also use the 'Message' controller for the experiment intro (this provides a simple
     // consent checkbox).
 
-    [["exp",1], "AcceptabilityJudgment", {s: "The girl bought a CD by David Bowie"},
-                "Question", {q: "What did the girl buy?", as:['CD', 'vinyl', 'cassette tape']}],
-    [["exp",2], "AcceptabilityJudgment", {s: "Who did the girl buy a CD by?"},
-                "Question", {q: "What did the girl buy?", as:['CD', 'vinyl', 'cassette tape']}],
-    [["exp",3], "AcceptabilityJudgment", {s: "Which singer did the girl buy a CD by?"},
-                "Question", {q: "What did the girl buy?", as:['CD', 'vinyl', 'cassette tape']}],
-
+    
     ["intro", "Form", {
         html: { include: "picture_intro.html" }
     } ],
-    ];
+
+    ["info", "Form", {
+        html: { include: "info.html" },
+        validators: {
+            ID: function (s) { if (s.match('[0-9]')) return true; else return "Bad value for ID number!"; },
+        }
+    } ],
+
+    ["consent", "Form", {
+        html: { include: "consent.html" }
+    } ],
+    
+    ["post-practice", "Form", {
+        html: { include: "post-practice.html" }
+    } ],
+    
+    ["debrief", "Form", {
+        html: { include: "debrief.html" }
+    } ],
