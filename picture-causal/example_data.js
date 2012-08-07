@@ -1,5 +1,4 @@
-var shuffleSequence = seq("intro", sepWith("sep", seq(randomize("exp"))));
-var practiceItemTypes = ["practice"];
+var shuffleSequence = seq("consent", "intro", "practice1", "sep", sepWith("sep", seq(randomize("practice"))), "post-practice", sepWith("sep", seq(randomize("picture-causal"))), "sr", "debrief");
 
 var defaults = [
     "Separator", {
