@@ -1,4 +1,7 @@
-var shuffleSequence = seq("consent", "intro", sepWith("sep", seq(randomize("practice"))), "post-practice", "setcounter", sepWith("sep", seq(randomize("picture-causal"))), "sr", "debrief");
+var shuffleSequence = seq("consent", "intro", sepWith("sep", seq(randomize("practice"))), "post-practice", "setcounter", sepWith("sep", seq(randomize("causal"))), "sr", "debrief");
+var practiceItemTypes = ["practice"];
+
+var manualSendResults = true;
 
 var defaults = [
     "Separator", {
@@ -13,7 +16,9 @@ var defaults = [
         as: ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
         presentAsScale: true,
         instructions: "Click the boxes to answer.",
-        leftComment: "Not at all", rightComment: "Extremely Influential"
+        leftComment: "Not at all",
+        rightComment: "Extremely Influential",
+        timeout: null
     },
     "Question", {
         hasCorrect: false,
@@ -57,7 +62,7 @@ var items = [
 
     
     ["intro", "Form", {
-        html: { include: "picture_intro.html" }
+        html: { include: "causal_intro.html" }
     } ],
 
     ["info", "Form", {
@@ -79,22 +84,19 @@ var items = [
         html: { include: "debrief.html" }
     } ],
 
-    ["practice"], 'AcceptabilityJudgment', {s: 'How much of a role does the flavor of ice cream have in deciding to eat it?'}],
-    ["practice"], 'AcceptabilityJudgment', {s: 'When putting on a coat in the morning, how influential is the weather outside?'}],
-    ["practice"], 'AcceptabilityJudgment', {s: 'How much does drinking a cup of coffee depend on how tired the drinker is?'}],
-    ["practice"], 'AcceptabilityJudgment', {s: 'If you buy a cookie, how much does it depend on how much it costs?'}],
-    ["practice"], 'AcceptabilityJudgment', {s: 'How much does eating at a restaurant depend on the type of food they serve?'}],
-    ["practice"], 'AcceptabilityJudgment', {s: 'When someone goes to a concert, how much does it matter who is playing?'}],
-
-
-
+    ["practice", 'AcceptabilityJudgment', {s: 'How much of a role does the flavor of ice cream have in deciding to eat it?'}],
+    ["practice", 'AcceptabilityJudgment', {s: 'When putting on a coat in the morning, how influential is the weather outside?'}],
+    ["practice", 'AcceptabilityJudgment', {s: 'How much does drinking a cup of coffee depend on how tired the drinker is?'}],
+    ["practice", 'AcceptabilityJudgment', {s: 'If you buy a cookie, how much does it depend on how much it costs?'}],
+    ["practice", 'AcceptabilityJudgment', {s: 'How much does eating at a restaurant depend on the type of food they serve?'}],
+    ["practice", 'AcceptabilityJudgment', {s: 'When someone goes to a concert, how much does it matter who is playing?'}],
 
 [['causal',1], 'AcceptabilityJudgment', {s: 'If you play a CD, how much does it depend on who it is by?'}, 'Question', {q: '$CD,play$', as:['']}],
 [['causal',1], 'AcceptabilityJudgment', {s: 'If you sell a CD, how much does it depend on who it is by?'}, 'Question', {q: '$CD,sell$', as:['']}],
 [['causal',1], 'AcceptabilityJudgment', {s: 'If you scratch a CD, how much does it depend on who it is by?'}, 'Question', {q: '$CD,scratch$', as:['']}],
 [['causal',1], 'AcceptabilityJudgment', {s: 'If you listen to a CD, how much does it depend on who it is by?'}, 'Question', {q: '$CD,listen to$', as:['']}],
 
-[['causal',2], 'AcceptabilityJudgment', {s: 'How much does passing a mural depend on what it depicts?'}, 'Question', {q: '$MURAL,pass$', as:['']}]
+[['causal',2], 'AcceptabilityJudgment', {s: 'How much does passing a mural depend on what it depicts?'}, 'Question', {q: '$MURAL,pass$', as:['']}],
 [['causal',2], 'AcceptabilityJudgment', {s: 'How much does planning a mural depend on what it depicts?'}, 'Question', {q: '$MURAL,plan$', as:['']}],
 [['causal',2], 'AcceptabilityJudgment', {s: 'How much does designing a mural depend on what it depicts?'}, 'Question', {q: '$MURAL,design$', as:['']}],
 [['causal',2], 'AcceptabilityJudgment', {s: 'How much does painting over a mural depend on what it depicts?'}, 'Question', {q: '$MURAL,paint over$', as:['']}],
