@@ -26,9 +26,11 @@ def parse_results_file(filename):
 
 	text = []
 	processed = []
+	languages = 'NONE'
+	ID = 'NONE'
 
-	moreheader = raw_input('Extra header labels from question field (e.g.: item,condition,factor1,factor2): ')
-	stim_type = raw_input('What type are your stims? (i.e. AcceptabilityJudgment): ')
+	#moreheader = raw_input('Extra header labels from question field (e.g.: item,condition,factor1,factor2): ')
+	#stim_type = raw_input('What type are your stims? (i.e. AcceptabilityJudgment): ')
 	output_loc = raw_input('Where would you like to put your parsed file? (enter filename path): ')
 	
 	for line in pretext:
@@ -41,17 +43,26 @@ def parse_results_file(filename):
 	first = 1;
 
 	for line in range(len(text)):
-		if re.search(stim_type, text[line]):
+		#get their info
+		if re.search('Form', text[line]):
+			if re.search('ID', text[line]):
+				ID = re.split('ID,', text[line])[1].strip()
+			elif re.search('languages', text[line]):
+				languages = re.split('languages,', text[line])[1].strip()
+		if re.search('AcceptabilityJudgment', text[line]):
 			if first:
-				processed.append(text[line])
+				#print 'first'
+				processed.append(str(ID+ ','+languages+','+text[line]))
 				first=0
 			else:
 				toAmend = processed.pop()
+				#print str('toAmend: ' + toAmend)
 				toAdd=''
 				splits = re.split('NULL,', text[line])
 				for thing in splits[1:]:
 					if thing is not '':
 						toAdd = str(toAdd + ',' + thing.strip(','))
+				#print str('toAdd: ' + toAdd)
 				processed.append(str(toAmend.strip()+ toAdd))
 				first = 1
 		#if the line is a question line, there's more to append
@@ -60,14 +71,15 @@ def parse_results_file(filename):
 			part = re.split('\$', text[line])[1]
 			part.strip('$')
 			parts = part.split('%2C')
-			print parts
 			processed.append(str(toAmend.strip()+ ','+ string.join(parts, ',')+'\n'))
 			
 	output = open(output_loc, 'w')
 
-	header = 'Time sent,MD5 Hash of IP Address,Controller,Item Number,Element Number,Type,Group,Stimulus,Answer,RT,'
+	header = 'ID,Languages,Time sent,MD5 Hash of IP Address,Controller,Item Number,Element Number,Type,Group,Stimulus,Answer,RT,N,V'
 
-	output.write(str(header+moreheader+'\n'))
+	#output.write(str(header+moreheader+'\n'))
+
+	output.write(str(header+'\n'))
 
 	for line in processed:
 		output.write(line)
