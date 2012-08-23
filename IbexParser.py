@@ -2,9 +2,14 @@
 
 import re, sys, string, urllib2
 
-local_file = 'data.txt'
+local_file = ''
+
 
 def get_data_file(url, data=None, headers={}):
+	"""
+	this method retrieves a data file from an internet location.
+	make sure it is not password protected or anything.
+	"""
 	req = urllib2.Request(url=url)
 	for key in headers:
 		req.add_header(key, headers[key])
@@ -51,7 +56,9 @@ def parse_results_file(filename):
 				ID = re.split('number,', text[line])[1].strip()
 			elif re.search('age', text[line]):
 				languages = re.split('age,', text[line])[1].strip()
-		if re.search('AcceptabilityJudgment', text[line]):
+
+		#looks for the main stimulus type, as entered earlier		
+		if re.search(stim_type, text[line]):
 			if first:
 				#print 'first'
 				processed.append(str(ID+ ','+languages+','+text[line]))
@@ -67,6 +74,7 @@ def parse_results_file(filename):
 				#print str('toAdd: ' + toAdd)
 				processed.append(str(toAmend.strip()+ toAdd))
 				first = 1
+				
 		#if the line is a question line, there's more to append
 		if re.search('Question', text[line]):
 			toAmend = processed.pop()
@@ -88,6 +96,8 @@ def parse_results_file(filename):
 
 
 #########################################
+
+#this all happens when you run the file!
 
 online = raw_input('Is your data file on the internet? (y/n): ')
 print online == 'y'
