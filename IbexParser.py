@@ -24,8 +24,9 @@ def get_data_file(url, data=None, headers={}):
 
 def parse_results_file(filename):
 	"""
-	This method takes in a results file created by ibex, and strips
-	out the comments
+	This method takes in a results file created by ibex, strips
+	out the comments, concatenates lines together that should go
+	together, and outputs complete lines to the specified text file
 	"""
 	file = open(filename, 'r')
 	pretext=[line for line in file.readlines() if line.strip()]
@@ -40,13 +41,13 @@ def parse_results_file(filename):
 	stim_type = raw_input('What type are your stims? (i.e. AcceptabilityJudgment): ')
 	output_loc = raw_input('Where would you like to put your parsed file? (enter filename path): ')
 	
+	#takes out comments
 	for line in pretext:
 		if re.match('#', line):
 			continue
 		else:
 			text.append(line)
 
-	#skip is 0 until we reach an "Acceptability Judgment line"
 	first = 1;
 
 	for line in range(len(text)):
@@ -74,7 +75,7 @@ def parse_results_file(filename):
 				#print str('toAdd: ' + toAdd)
 				processed.append(str(toAmend.strip()+ toAdd))
 				first = 1
-				
+
 		#if the line is a question line, there's more to append
 		if re.search('Question', text[line]):
 			toAmend = processed.pop()
@@ -89,22 +90,23 @@ def parse_results_file(filename):
 
 	output.write(str(header+moreheader+'\n'))
 
+	#put it all into a text file
 	for line in processed:
 		output.write(line)
 	output.close()
-
-
 
 #########################################
 
 #this all happens when you run the file!
 
 online = raw_input('Is your data file on the internet? (y/n): ')
-print online == 'y'
+#if data are online, go scrape it
 if online is 'y':
-	online_file = raw_input('What\'s the URL where is your data file located?: ')
+	online_file = raw_input('What\'s the URL where is your raw data file located?: ')
 	local_file = raw_input('Where would you like to put your raw file? (enter filename path): ')
 	get_data_file(online_file)
+
+# if they're local, get 'em!'
 else:
 	local_file = raw_input('Where is your raw data file? (enter filename path): ')
 
